@@ -14,43 +14,6 @@
 #define RFM95_RST 4
 #define RFM95_INT 7
 
-/* for feather m0  
-#define RFM95_CS 8
-#define RFM95_RST 4
-#define RFM95_INT 3
-*/
-
-/* for shield 
-#define RFM95_CS 10
-#define RFM95_RST 9
-#define RFM95_INT 7
-*/
-
-
-/* for ESP w/featherwing 
-#define RFM95_CS  2    // "E"
-#define RFM95_RST 16   // "D"
-#define RFM95_INT 15   // "B"
-*/
-
-/* Feather 32u4 w/wing
-#define RFM95_RST     11   // "A"
-#define RFM95_CS      10   // "B"
-#define RFM95_INT     2    // "SDA" (only SDA/SCL/RX/TX have IRQ!)
-*/
-
-/* Feather m0 w/wing 
-#define RFM95_RST     11   // "A"
-#define RFM95_CS      10   // "B"
-#define RFM95_INT     6    // "D"
-*/
-
-/* Teensy 3.x w/wing 
-#define RFM95_RST     9   // "A"
-#define RFM95_CS      10   // "B"
-#define RFM95_INT     4    // "C"
-*/
-
 // Change to 434.0 or other frequency, must match RX's freq!
 #define RF95_FREQ 915.0
 
