@@ -14,7 +14,7 @@
 #define RFM95_RST 4
 #define RFM95_INT 7
 
-// Change to 434.0 or other frequency, must match RX's freq!
+// Change to 434.0 or other frequency, must match TX's freq!
 #define RF95_FREQ 915.0
 
 // Singleton instance of the radio driver
@@ -29,11 +29,21 @@ void setup()
   pinMode(RFM95_RST, OUTPUT);
   digitalWrite(RFM95_RST, HIGH);
 
-  while (!Serial);
+  long double last = 0;
+
+  while (!Serial){
+    if(millis() - last > 500){
+      digitalWrite(LED, !digitalRead(LED));
+      last = millis();
+    }
+  }
+
+  digitalWrite(LED, HIGH);
+
   Serial.begin(9600);
   delay(100);
 
-  Serial.println("Feather LoRa RX Test!");
+  Serial.println("Aquabot Feather LoRa RX");
   
   // manual reset
   digitalWrite(RFM95_RST, LOW);
@@ -52,7 +62,6 @@ void setup()
     Serial.println("setFrequency failed");
     while (1);
   }
-  Serial.print("Set Freq to: "); Serial.println(RF95_FREQ);
 
   // Defaults after init are 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on
 
@@ -60,6 +69,8 @@ void setup()
   // If you are using RFM95/96/97/98 modules which uses the PA_BOOST transmitter pin, then 
   // you can set transmitter powers from 5 to 23 dBm:
   rf95.setTxPower(23, false);
+
+  digitalWrite(LED, LOW);
 }
 
 void loop()
@@ -73,22 +84,23 @@ void loop()
     if (rf95.recv(buf, &len))
     {
       digitalWrite(LED, HIGH);
-      RH_RF95::printBuffer("Received: ", buf, len);
-      Serial.print("Got: ");
-      Serial.println((char*)buf);
-       Serial.print("RSSI: ");
+      Serial.print((char*)buf);
+      Serial.print(":");
       Serial.println(rf95.lastRssi(), DEC);
       delay(10);
       // Send a reply
-      uint8_t data[] = "And hello back to you";
-      rf95.send(data, sizeof(data));
-      rf95.waitPacketSent();
-      Serial.println("Sent a reply");
       digitalWrite(LED, LOW);
     }
     else
     {
       Serial.println("Receive failed");
+      digitalWrite(LED, HIGH);
+      delay(10);
+      digitalWrite(LED, LOW);
+      delay(10);
+      digitalWrite(LED, HIGH);
+      delay(10);
+      digitalWrite(LED, LOW);
     }
   }
 }
