@@ -90,16 +90,27 @@ void loop() {
   if(now - last_update > UPDATE ){
 
     packetnum = packetnum + 1;
+
+    if(packetnum > 99999){
+      packetnum = 1;
+    }
+
     int fix = GPS.fix;
     int satNum = GPS.satellites;
     float lat = GPS.latitudeDegrees;
     float lon = GPS.longitudeDegrees;
 
+    char latbuf[11];
+    char lonbuf[11];
+
+    dtostrf(lat, 10, 6, latbuf);
+    dtostrf(lon, 10, 6, lonbuf);
+
     // Send a message to rf95_server
 
     char radiopacket[MSGLEN];
 
-    sprintf(radiopacket, "%05d:%01d:%02d:%02.6f:%02.6f", packetnum, fix, satNum, lat, lon);
+    sprintf(radiopacket, "%05d:%01d:%02d:%s:%s", packetnum, fix, satNum, latbuf, lonbuf);
 
     radiopacket[MSGLEN - 1] = 0;
 
@@ -113,4 +124,3 @@ void loop() {
 
   }
 }
-
